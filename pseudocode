@@ -1,0 +1,48 @@
+# Main program starts here
+# Initialize the App class and run the main loop
+# This manages switching between screens (start, create quiz, take quiz, and score screen.)
+
+# Class: App
+# - Manages the main window and transitions between screens
+# - Attributes: window, current_screen, quiz_manager
+# - Methods:
+#     - switch_screen(new_screen): Destroys the current screen and loads the new one
+
+# Class: StartScreen
+# - Initial screen with "Create Quiz" and "Take Quiz" options
+# - Methods:
+#     - on_create_quiz_button(): switches to CreateQuizScreen
+#     - on_take_quiz_button(): switches to TakeQuizScreen
+
+# Class: CreateQuizScreen
+# - UI for entering quiz title, description, and questions
+# - Attributes: entry fields for title and description, list of questions
+# - Methods:
+#     - add_question(): opens question input UI and adds it to list
+#     - save_quiz(): calls QuizManager to save quiz data to JSON file
+
+# Class: TakeQuizScreen
+# - UI for selecting which quiz to take
+# - Attributes: list of available quizzes from JSON
+# - Methods:
+#     - display_quiz_list(): loads quiz names as selectable options
+#     - start_quiz(quiz_name): loads selected quiz and switches to QuizRunnerScreen
+
+# Class: QuizRunnerScreen
+# - Handles quiz-taking logic
+# - Attributes: quiz data, current question index, score counter
+# - Methods:
+#     - show_question(): displays current question and choices
+#     - check_answer(): compares user answer, updates score, moves to next question
+#     - show_results(): saves results and displays a summary
+
+# Class: QuizManager
+# - Handles quiz data storage and retrieval
+# - Methods:
+#     - save_quiz(): saves quiz to JSON
+#     - load_quiz(): loads quiz data from JSON
+#     - get_all_quizzes(): returns a list of quiz titles
+
+# Utility Functions
+# - load_image(): loads image assets
+# - play_sound(): plays sound effects
