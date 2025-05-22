@@ -1,6 +1,10 @@
 # Import all required modules and classes
 
 # Define main app class (QuizzyCrafterApp) that inherits from BaseScreen
+   # Initialize root window
+   # Load shared assets (backgrounds, button images, font)
+   # Initialize QuizManager
+   # Load start menu screen on launch
 # Define method to load StartMenu screen
    # Display start background
    # Show Create Quiz and Take Quiz buttons
