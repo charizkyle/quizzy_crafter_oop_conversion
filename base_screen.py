@@ -10,6 +10,12 @@ class BaseScreen:
         self.current_frame = None
         self.custom_font = tkFont.Font(family="consolas", size=14)
 
+        # Directories
+        self.QUIZ_FOLDER = "quizzes"
+        self.RESULTS_FOLDER = "quiz_results"
+        os.makedirs(self.QUIZ_FOLDER, exist_ok=True)
+        os.makedirs(self.RESULTS_FOLDER, exist_ok=True)
+
         # Load Images
         self.start_bg = self.load_background("assets/start_bg.png")
         self.create_bg = self.load_background("assets/create_bg.png")
