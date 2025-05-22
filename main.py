@@ -48,7 +48,6 @@ class AssetLoader:
         winsound.PlaySound(os.path.join(ASSET_DIR, "click.wav"),
                            winsound.SND_FILENAME | winsound.SND_ASYNC)
         
-
 class QuizApp:
     def __init__(self, root: tk.Tk):
         self.root = root
@@ -66,3 +65,10 @@ class QuizApp:
         # current visible Frame
         self._current: tk.Frame | None = None
         self.show_start_screen()
+
+    # screen switching
+    def _switch(self, frame_cls, *args, **kwargs):
+        if self._current:
+            self._current.destroy()
+        self._current = frame_cls(self.root, self, *args, **kwargs)
+        self._current.pack(fill="both", expand=True)
