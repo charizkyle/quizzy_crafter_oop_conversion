@@ -47,3 +47,22 @@ class AssetLoader:
     def play_click():
         winsound.PlaySound(os.path.join(ASSET_DIR, "click.wav"),
                            winsound.SND_FILENAME | winsound.SND_ASYNC)
+        
+
+class QuizApp:
+    def __init__(self, root: tk.Tk):
+        self.root = root
+        self.root.title("Quizzy Crafter")
+        self.root.geometry("800x600")
+        self.root.resizable(False, False)
+
+        # data handling
+        self.quiz_manager = QuizManager()
+
+        # graphics / audio
+        self.assets = AssetLoader(root)
+        self.assets.load_all()
+
+        # current visible Frame
+        self._current: tk.Frame | None = None
+        self.show_start_screen()
