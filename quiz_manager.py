@@ -1,11 +1,12 @@
-import json
 import os
+import json
 
 class QuizManager:
-    def __init__(self):
+    def __init__(self, quiz_folder="quizzes"):
         self.title = ""
         self.description = ""
         self.questions = []
+        self.quiz_folder = quiz_folder
 
     def reset(self):
         self.title = ""
@@ -13,7 +14,7 @@ class QuizManager:
         self.questions = []
 
     def save_quiz(self):
-        filename = os.path.join("quizzes", f"{self.title.replace(' ', '_')}.json")
+        filename = os.path.join(self.quiz_folder, f"{self.title.replace(' ', '_')}.json")
         data = {
             "title": self.title,
             "description": self.description,
@@ -23,7 +24,7 @@ class QuizManager:
             json.dump(data, file, indent=4)
 
     def load_quiz(self, filename):
-        with open(os.path.join("quizzes", filename), 'r') as file:
+        with open(os.path.join(self.quiz_folder, filename), 'r') as file:
             data = json.load(file)
         self.title = data['title']
         self.description = data['description']
