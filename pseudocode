@@ -26,4 +26,8 @@
    # Navigate to next/previous question
    # When finished, show score screen
 # Define method to load ScoreScreen
+   # Display user's score and question summary
+   # Compare user answer vs correct answer
+   # Allow saving results to text file
+   # Return to start menu
 # Start the Tkinter application loop
