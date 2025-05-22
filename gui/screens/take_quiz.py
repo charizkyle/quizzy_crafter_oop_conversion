@@ -88,3 +88,40 @@ class TakeQuizScreen(tk.Frame):
                  font=self.app.assets.font,
                  bg="#004477", fg="light pink"
                  ).place(x=50, y=120)
+        
+        # answer buttons
+        self.selected = tk.StringVar(value="")
+        for idx, opt in enumerate(ques.choices):
+            letter = chr(97+idx)
+            rb = tk.Radiobutton(self, text=f"{letter}) {opt}",
+                                variable=self.selected, value=letter,
+                                font=self.app.assets.font,
+                                bg="#004477", fg="light pink",
+                                selectcolor="white",
+                                indicatoron=False, width=50, anchor="w",
+                                command=self.app.assets.play_click)
+            rb.place(x=150, y=180 + idx*55)
+
+        tk.Button(self, image=self.app.assets.buttons["next"],
+                  borderwidth=0, bg="#1f628e",
+                  command=self._next
+                 ).place(x=500, y=500)
+
+        tk.Button(self, image=self.app.assets.buttons["back"],
+                  borderwidth=0, bg="#1f628e",
+                  command=self._prev
+                 ).place(x=100, y=500)
+
+    def _next(self):
+        self.qm.record_answer(self.index, self.selected.get())
+        self.index += 1
+        if self.index >= len(self.qm.questions):
+            score, total, summary = self.qm.calculate_score()
+            self.app.show_result_screen(score, total, summary)
+        else:
+            self._draw_question_screen()
+
+    def _prev(self):
+        if self.index > 0:
+            self.index -= 1
+            self._draw_question_screen()
