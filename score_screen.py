@@ -1,47 +1,85 @@
-from base_screen import BaseScreen
 import tkinter as tk
-from PIL import Image, ImageTk
 import os
-import json
+from tkinter import font as tkFont
 
-class ScoreScreen(BaseScreen):
-    def __init__(self, master, app):
-        super().__init__(master, app, bg_image_path="assets/score_bg.png")
+class ScoreScreen:
+    def __init__(self, app, user_name, score, user_answers):
+        self.app = app
+        self.root = app.root
+        self.quiz_manager = app.quiz_manager
+        self.user_name = user_name
+        self.score = score
+        self.user_answers = user_answers
+        self.create_screen()
 
-        self.score_label = tk.Label(self, text="", font=("consolas", 28), bg="#004477", fg="white")
-        self.score_label.place(x=250, y=200)
+    def create_screen(self):
+        frame = tk.Frame(self.root)
+        tk.Label(frame, image=self.app.score_bg).place(x=0, y=0, relwidth=1, relheight=1)
 
-        back_img = ImageTk.PhotoImage(Image.open("assets/back_button.png").resize((200, 60)))
-        back_button = tk.Button(self, image=back_img, command=self.back_to_start, borderwidth=0, bg="#1f628e")
-        back_button.image = back_img
-        back_button.place(x=300, y=350)
+        tk.Label(
+            frame,
+            text=f"Your Score: {self.score}/{len(self.quiz_manager.questions)}",
+            font=tkFont.Font(family="consolas", size=16),
+            fg="white",
+            bg="#e88e93"
+        ).place(x=310, y=50)
 
-    def calculate_score(self):
-        quiz = self.app.quiz_manager
-        correct = 0
-        for q, user_ans in zip(quiz.questions, getattr(quiz, "user_answers", [])):
-            if q['answer'] == user_ans:
-                correct += 1
-        return correct, len(quiz.questions)
+        canvas = tk.Canvas(frame, bg="white", highlightthickness=0)
+        scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scroll_frame = tk.Frame(canvas, bg="white")
 
-    def show_score(self):
-        correct, total = self.calculate_score()
-        self.score_label.config(text=f"You scored {correct} out of {total}!")
+        scroll_frame.bind("<Configure>", lambda _: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Save result file
-        results_dir = "quiz_results"
-        if not os.path.exists(results_dir):
-            os.makedirs(results_dir)
-        filename = os.path.join(results_dir, f"{self.app.user_name}_results.json")
-        data = {
-            "user": self.app.user_name,
-            "quiz_title": self.app.quiz_manager.title,
-            "score": correct,
-            "total": total
-        }
-        with open(filename, 'w') as f:
-            json.dump(data, f, indent=4)
+        for idx, user_answer in enumerate(self.user_answers):
+            qtext = user_answer["question"]
+            user_text = user_answer["answer"]
+            correct_text = self.quiz_manager.questions[idx]["answer"]
 
-    def back_to_start(self):
-        self.play_click_sound()
-        self.app.show_frame("StartScreen")
+            tk.Label(
+                scroll_frame,
+                text=f"Question {idx+1}: {qtext[:50]}...",
+                font=tkFont.Font(family="consolas", size=10),
+                bg="white",
+                fg="lightpink"
+            ).pack(anchor="w", pady=2)
+
+            tk.Label(
+                scroll_frame,
+                text=f"Your answer: {user_text}",
+                font=tkFont.Font(family="consolas", size=10),
+                bg="white",
+                fg="lightpink"
+            ).pack(anchor="w", pady=2)
+
+            color = "green" if user_text == correct_text else "red"
+            tk.Label(
+                scroll_frame,
+                text=f"Correct: {correct_text}",
+                font=tkFont.Font(family="consolas", size=10),
+                bg="white",
+                fg=color
+            ).pack(anchor="w", pady=2)
+
+        canvas.place(x=80, y=160, width=600, height=300)
+        scrollbar.place(x=680, y=160, height=300)
+
+        tk.Button(
+            frame,
+            image=self.app.button_images["submit"],
+            command=lambda: [self.app.play_click_sound(), self.save_and_exit()],
+            borderwidth=0,
+            bg="#1f628e"
+        ).place(x=300, y=500)
+
+        self.app.switch_frame(frame)
+
+    def save_and_exit(self):
+        result_path = os.path.join(self.app.RESULTS_FOLDER, f"{self.user_name}_quiz_results.txt")
+        with open(result_path, "w") as file:
+            file.write(f"User: {self.user_name}\nQuiz: {self.quiz_manager.title}\nScore: {self.score}/{len(self.quiz_manager.questions)}\n\n")
+            for idx, answer in enumerate(self.user_answers):
+                correct = self.quiz_manager.questions[idx]['answer']
+                file.write(f"Question: {answer['question']}\nYour Answer: {answer['answer']}\nCorrect Answer: {correct}\n\n")
+        self.app.load_start_menu()
