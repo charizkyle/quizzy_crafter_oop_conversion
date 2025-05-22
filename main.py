@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from start_screen import StartScreen
 from create_quiz_screen import CreateQuizScreen
 from enter_questions_screen import EnterQuestionsScreen
@@ -8,7 +9,7 @@ from score_screen import ScoreScreen
 from quiz_manager import QuizManager
 import os
 
-class QuizApp(tk.Tk):
+class QuizApp(tk.Tk):  # Ensure proper inheritance from tk.Tk
     def __init__(self):
         super().__init__()
         self.title("Quizzy Crafter")
