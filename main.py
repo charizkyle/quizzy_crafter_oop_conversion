@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import font as tkFont, messagebox
 from PIL import Image, ImageTk
 
-from logic.quiz_manager import QuizManager
+from quiz_manager import QuizManager
 from gui.screens.start_screen import StartScreen
 from gui.screens.create_quiz_screen import CreateQuizScreen
 from gui.screens.take_quiz_screen import TakeQuizScreen
