@@ -35,3 +35,36 @@ class TakeQuizScreen(tk.Frame):
             messagebox.showinfo("No Quizzes", "No quizzes available.")
             self.app.show_start_screen()
             return
+        
+        # replace current frame content with scrollable list
+        for w in self.winfo_children(): w.destroy()
+        bg = self.app.assets.backgrounds["take"]
+        tk.Label(self, image=bg).place(x=0, y=0, relwidth=1, relheight=1)
+
+        tk.Label(self, text="Select a Quiz:", font=self.app.assets.font,
+                 bg="#004477", fg="white").pack(pady=150)
+
+        canvas = tk.Canvas(self, bg="#004477", highlightthickness=0)
+        scroll = tk.Scrollbar(self, orient="vertical",
+                              command=canvas.yview)
+        frame  = tk.Frame(canvas, bg="#004477")
+        frame.bind("<Configure>",
+                   lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0,0), window=frame, anchor="nw")
+        canvas.configure(yscrollcommand=scroll.set)
+        canvas.place(x=50, y=200, width=700, height=300)
+        scroll.place(x=750, y=200, height=300)
+
+        for fname in files:
+            btn = tk.Button(frame, text=fname.replace(".json",""),
+                          font=self.app.assets.font,
+                          bg="#004477", fg="light pink",
+                          command=lambda f=fname: [self.app.assets.play_click(),
+                                                   self._begin_quiz(f)])
+            btn.pack(pady=4, padx=20)
+
+        tk.Button(self, image=self.app.assets.buttons["back"],
+                  borderwidth=0, bg="#1f628e",
+                  command=lambda: [self.app.assets.play_click(),
+                                   self.app.show_start_screen()]
+                 ).place(x=300, y=500)
