@@ -4,52 +4,35 @@ from quiz_manager import QuizManager
 from start_menu import StartMenu
 from create_quiz import CreateQuizScreen
 from take_quiz import TakeQuizScreen
-from quiz_questions import QuizQuestionsScreen
+from quiz_questions import QuizQuestionScreen
 from score_screen import ScoreScreen
 
-class QuizApp(tk.Tk):  # Ensure proper inheritance from tk.Tk
-    def __init__(self):
-        super().__init__()
-        self.title("Quizzy Crafter")
-        self.geometry("800x600")
-        self.resizable(False, False)
-
-        # Create necessary folders
-        for folder in ["quizzes", "quiz_results"]:
-            if not os.path.exists(folder):
-                os.makedirs(folder)
-
+class QuizzyCrafterApp(BaseScreen):
+    def __init__(self, root):
+        super().__init__(root)
+        self.root = root
         self.quiz_manager = QuizManager()
-        self.user_name = ""
+        self.load_start_menu()
 
-        container = tk.Frame(self)
-        container.pack(fill="both", expand=True)
+    def load_start_menu(self):
+        StartMenu(self)
 
-        self.frames = {}
+    def load_create_quiz_screen(self):
+        CreateQuizScreen(self)
 
-        # Mapping of frame names to their classes
-        for F in (StartScreen, CreateQuizScreen, TakeQuizScreen, QuizQuestionsScreen, ScoreScreen):
-            frame_name = F.__name__
-            frame = F(container, self)
-            self.frames[frame_name] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
+    def load_take_quiz_screen(self):
+        TakeQuizScreen(self)
 
-        self.show_frame("StartScreen")
+    def load_quiz_question_screen(self, user_name):
+        QuizQuestionScreen(self, user_name)
 
-    def show_frame(self, frame_name):
-        frame = self.frames[frame_name]
-
-        # Special actions on showing certain frames
-        if frame_name == "QuizQuestionsScreen":
-            frame.reset()
-        if frame_name == "ScoreScreen":
-            frame.show_score()
-        if frame_name == "TakeQuizScreen":
-            # Reset username entry when returning here
-            frame.name_entry.delete(0, tk.END)
-
-        frame.tkraise()
+    def load_score_screen(self, user_name, score, user_answers):
+        ScoreScreen(self, user_name, score, user_answers)
 
 if __name__ == "__main__":
-    app = QuizApp()
-    app.mainloop()
+    root = tk.Tk()
+    root.title("Quizzy Crafter Simulator")
+    root.geometry("800x600")
+    root.resizable(False, False)
+    app = QuizzyCrafterApp(root)
+    root.mainloop()
