@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from start_screen import StartScreen
-from create_quiz_screen import CreateQuizScreen
-from enter_questions_screen import EnterQuestionsScreen
+from create_quiz import CreateQuizScreen
 from take_quiz_screen import TakeQuizScreen
 from quiz_questions_screen import QuizQuestionsScreen
 from score_screen import ScoreScreen
@@ -30,7 +29,7 @@ class QuizApp(tk.Tk):  # Ensure proper inheritance from tk.Tk
         self.frames = {}
 
         # Mapping of frame names to their classes
-        for F in (StartScreen, CreateQuizScreen, EnterQuestionsScreen, TakeQuizScreen, QuizQuestionsScreen, ScoreScreen):
+        for F in (StartScreen, CreateQuizScreen, TakeQuizScreen, QuizQuestionsScreen, ScoreScreen):
             frame_name = F.__name__
             frame = F(container, self)
             self.frames[frame_name] = frame
