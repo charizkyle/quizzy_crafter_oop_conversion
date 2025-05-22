@@ -1,94 +1,56 @@
-from tkinter import Tk
-import os, winsound, random
 import tkinter as tk
-from tkinter import font as tkFont, messagebox
-from PIL import Image, ImageTk
-
-from quiz_manager import QuizManager
 from start_screen import StartScreen
 from create_quiz_screen import CreateQuizScreen
+from enter_questions_screen import EnterQuestionsScreen
 from take_quiz_screen import TakeQuizScreen
-from gui.screens.result_screen import ResultScreen
+from quiz_questions_screen import QuizQuestionsScreen
+from score_screen import ScoreScreen
+from quiz_manager import QuizManager
+import os
 
-ASSET_DIR = "assets"
-BTN_SIZE  = (200, 60)
+class QuizApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Quizzy Crafter")
+        self.geometry("800x600")
+        self.resizable(False, False)
 
-class AssetLoader:
-    def __init__(self, root):
-        self.root = root
-        self.backgrounds = {}
-        self.buttons = {}
-        self.font = None
+        # Create necessary folders
+        for folder in ["quizzes", "quiz_results"]:
+            if not os.path.exists(folder):
+                os.makedirs(folder)
 
-    def _photo(self, path, size=None):
-        img = Image.open(os.path.join(ASSET_DIR, path)).convert("RGBA")
-        if size: img = img.resize(size)
-        return ImageTk.PhotoImage(img)
-
-    def load_all(self):
-        # backgrounds
-        for name in ("start", "create", "take", "score"):
-            self.backgrounds[name] = self._photo(f"{name}_bg.png", (800, 600))
-
-        # buttons
-        btn_files = {
-            "create": "create_button.png",
-            "take": "take_button.png",
-            "next": "next_button.png",
-            "add_question": "add_question_button.png",
-            "save": "save_button.png",
-            "back": "back_button.png",
-            "submit": "submit_button.png",
-        }
-        for key, fn in btn_files.items():
-            self.buttons[key] = self._photo(fn, BTN_SIZE)
-
-        # fonts
-        self.font = tkFont.Font(family="consolas", size=14)
-
-    # small helper for click SFX
-    @staticmethod
-    def play_click():
-        winsound.PlaySound(os.path.join(ASSET_DIR, "click.wav"),
-                           winsound.SND_FILENAME | winsound.SND_ASYNC)
-        
-class QuizApp:
-    def __init__(self, root: tk.Tk):
-        self.root = root
-        self.root.title("Quizzy Crafter")
-        self.root.geometry("800x600")
-        self.root.resizable(False, False)
-
-        # data handling
         self.quiz_manager = QuizManager()
+        self.user_name = ""
 
-        # graphics / audio
-        self.assets = AssetLoader(root)
-        self.assets.load_all()
+        container = tk.Frame(self)
+        container.pack(fill="both", expand=True)
 
-        # current visible Frame
-        self._current: tk.Frame | None = None
-        self.show_start_screen()
+        self.frames = {}
 
-    # screen switching
-    def _switch(self, frame_cls, *args, **kwargs):
-        if self._current:
-            self._current.destroy()
-        self._current = frame_cls(self.root, self, *args, **kwargs)
-        self._current.pack(fill="both", expand=True)
+        # Mapping of frame names to their classes
+        for F in (StartScreen, CreateQuizScreen, EnterQuestionsScreen, TakeQuizScreen, QuizQuestionsScreen, ScoreScreen):
+            frame_name = F.__name__
+            frame = F(container, self)
+            self.frames[frame_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
-    def show_start_screen(self):
-        self._switch(StartScreen)
+        self.show_frame("StartScreen")
 
-    def show_create_quiz_screen(self):
-        self._switch(CreateQuizScreen)
+    def show_frame(self, frame_name):
+        frame = self.frames[frame_name]
 
-    def show_take_quiz_screen(self):
-        self._switch(TakeQuizScreen)
+        # Special actions on showing certain frames
+        if frame_name == "QuizQuestionsScreen":
+            frame.reset()
+        if frame_name == "ScoreScreen":
+            frame.show_score()
+        if frame_name == "TakeQuizScreen":
+            # Reset username entry when returning here
+            frame.name_entry.delete(0, tk.END)
 
-    def show_result_screen(self, score, total, summary):
-        self._switch(ResultScreen, score, total, summary)
+        frame.tkraise()
 
 if __name__ == "__main__":
-    root = Tk()
-    root.mainloop()
+    app = QuizApp()
+    app.mainloop()
