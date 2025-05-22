@@ -11,10 +11,10 @@ class BaseScreen:
         self.custom_font = tkFont.Font(family="consolas", size=14)
 
         # Directories
-        self.QUIZ_FOLDER = "quizzes"
-        self.RESULTS_FOLDER = "quiz_results"
-        os.makedirs(self.QUIZ_FOLDER, exist_ok=True)
-        os.makedirs(self.RESULTS_FOLDER, exist_ok=True)
+        self.quiz_folder = "quizzes"
+        self.results_folder = "quiz_results"
+        os.makedirs(self.quiz_folder, exist_ok=True)
+        os.makedirs(self.results_folder, exist_ok=True)
 
         # Load Images
         self.start_bg = self.load_background("assets/start_bg.png")
