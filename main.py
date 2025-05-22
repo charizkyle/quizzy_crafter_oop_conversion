@@ -76,3 +76,19 @@ class QuizApp:
             self._current.destroy()
         self._current = frame_cls(self.root, self, *args, **kwargs)
         self._current.pack(fill="both", expand=True)
+
+    def show_start_screen(self):
+        self._switch(StartScreen)
+
+    def show_create_quiz_screen(self):
+        self._switch(CreateQuizScreen)
+
+    def show_take_quiz_screen(self):
+        self._switch(TakeQuizScreen)
+
+    def show_result_screen(self, score, total, summary):
+        self._switch(ResultScreen, score, total, summary)
+
+if __name__ == "__main__":
+    root = Tk()
+    root.mainloop()
