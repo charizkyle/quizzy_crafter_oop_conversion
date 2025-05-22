@@ -5,6 +5,10 @@ from tkinter import font as tkFont, messagebox
 from PIL import Image, ImageTk
 
 from logic.quiz_manager import QuizManager
+from gui.screens.start_screen import StartScreen
+from gui.screens.create_quiz_screen import CreateQuizScreen
+from gui.screens.take_quiz_screen import TakeQuizScreen
+from gui.screens.result_screen import ResultScreen
 
 ASSET_DIR = "assets"
 BTN_SIZE  = (200, 60)
