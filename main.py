@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 from quiz_manager import QuizManager
 from start_screen import StartScreen
 from create_quiz_screen import CreateQuizScreen
-from gui.screens.take_quiz_screen import TakeQuizScreen
+from take_quiz_screen import TakeQuizScreen
 from gui.screens.result_screen import ResultScreen
 
 ASSET_DIR = "assets"
