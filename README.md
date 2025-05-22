@@ -43,7 +43,9 @@ The app uses object-oriented programming with inheritance. Each screen (Start, C
 Data like quiz title, questions, and answers are managed via the QuizManager class, saved as .json files, and user results are stored as .txt files in the quiz_results folder.
 
 📂 Folder Structure
+
 quizzy_crafter_oop_conversion/
+
 ├── base_screen.py # Base class for all screen UIs
 
 ├── create_quiz.py # Handles quiz creation flow
@@ -71,7 +73,9 @@ quizzy_crafter_oop_conversion/
 - These folders are automatically created if they don't already exist.
 
 🎨 Assets
+
 assets/
+
 ├── start_bg.png
 
 ├── create_bg.png
