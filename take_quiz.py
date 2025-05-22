@@ -35,7 +35,7 @@ class TakeQuizScreen:
         self.app.switch_frame(frame)
 
     def show_quizzes(self, user_name):
-        quiz_files = [file for file in os.listdir(self.app.quiz_folder) if file.endswith('.json')]
+        quiz_files = [file for file in os.listdir(self.app.QUIZ_FOLDER) if file.endswith('.json')]
         if not quiz_files:
             messagebox.showinfo("No Quizzes", "No quizzes available.")
             self.app.load_start_menu()
