@@ -2,6 +2,9 @@
 
 # Define main app class (QuizzyCrafterApp) that inherits from BaseScreen
 # Define method to load StartMenu screen
+   # Display start background
+   # Show Create Quiz and Take Quiz buttons
+   # Navigate to appropriate screen based on user action
 # Define method to load CreateQuizScreen
    # Reset quiz manager data
    # Ask for quiz title and description
@@ -9,6 +12,7 @@
 # Define method to add questions
    # Show inputs for question, options, and correct answer
    # Add each question to the QuizManager
+   # On Save: write all quiz data to JSON and return to start menu
 # Define method to load TakeQuizScreen
    # Ask user for name input
    # Validate name
