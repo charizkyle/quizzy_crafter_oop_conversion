@@ -1,4 +1,4 @@
-import tkinter as tk, os
+import random, tkinter as tk, os
 from tkinter import messagebox
 
 class TakeQuizScreen(tk.Frame):
@@ -68,3 +68,23 @@ class TakeQuizScreen(tk.Frame):
                   command=lambda: [self.app.assets.play_click(),
                                    self.app.show_start_screen()]
                  ).place(x=300, y=500)
+        
+    # take quiz
+    def _begin_quiz(self, filename):
+        self.qm.load_quiz(filename)
+        random.shuffle(self.qm.questions)          # shuffle order
+        self.index = 0
+        self.selected = None
+        self.user_answers = []
+        self._draw_question_screen()
+
+    def _draw_question_screen(self):
+        for w in self.winfo_children(): w.destroy()
+        bg = self.app.assets.backgrounds["take"]
+        tk.Label(self, image=bg).place(x=0, y=0, relwidth=1, relheight=1)
+
+        ques = self.qm.questions[self.index]
+        tk.Label(self, text=ques.text, wraplength=700,
+                 font=self.app.assets.font,
+                 bg="#004477", fg="light pink"
+                 ).place(x=50, y=120)
