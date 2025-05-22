@@ -5,7 +5,7 @@ from tkinter import font as tkFont, messagebox
 from PIL import Image, ImageTk
 
 from quiz_manager import QuizManager
-from gui.screens.start_screen import StartScreen
+from start_screen import StartScreen
 from gui.screens.create_quiz_screen import CreateQuizScreen
 from gui.screens.take_quiz_screen import TakeQuizScreen
 from gui.screens.result_screen import ResultScreen
