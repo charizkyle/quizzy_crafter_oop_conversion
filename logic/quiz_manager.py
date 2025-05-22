@@ -21,19 +21,19 @@ class QuizManager:
         data = {
             "title":       self.title,
             "description": self.description,
-            "questions":   [q.to_dict() for q in self.questions]
+            "questions":   [ques.to_dict() for ques in self.questions]
         }
         with open(os.path.join("quizzes", filename+".json"), "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
     def load_quiz(self, filename:str):
-        with open(os.path.join("quizzes", filename), "r", encoding="utf-8") as f:
-            data = json.load(f)
+        with open(os.path.join("quizzes", filename), "r", encoding="utf-8") as file:
+            data = json.load(file)
         self.title        = data["title"]
         self.description  = data["description"]
         self.questions    = [
-            Question(q["question"], q["choices"], q["correct"])
-            for q in data["questions"]
+            Question(ques["question"], ques["choices"], ques["correct"])
+            for ques in data["questions"]
         ]
         self.answers.clear()
 
@@ -44,22 +44,22 @@ class QuizManager:
     def calculate_score(self):
         score = 0
         summary = []
-        for idx, q in enumerate(self.questions):
+        for idx, ques in enumerate(self.questions):
             yours = self.answers.get(idx, "")
-            if yours == q.correct: score += 1
+            if yours == ques.correct: score += 1
             summary.append({
-                "question":        q.text,
+                "question":        ques.text,
                 "your_answer":     yours,
-                "correct_answer":  q.correct
+                "correct_answer":  ques.correct
             })
 
         # auto-save detailed result file
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         result_path = os.path.join("quiz_results",
                                    f"{self.title}_{stamp}.json")
-        with open(result_path, "w", encoding="utf-8") as f:
+        with open(result_path, "w", encoding="utf-8") as file:
             json.dump({"title": self.title,
                        "score": score,
                        "total": len(self.questions),
-                       "summary": summary}, f, indent=2)
+                       "summary": summary}, file, indent=2)
         return score, len(self.questions), summary
