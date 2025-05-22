@@ -1,12 +1,11 @@
 import tkinter as tk
-from tkinter import ttk
-from start_screen import StartScreen
-from create_quiz import CreateQuizScreen
-from take_quiz_screen import TakeQuizScreen
-from quiz_questions_screen import QuizQuestionsScreen
-from score_screen import ScoreScreen
+from base_screen import BaseScreen
 from quiz_manager import QuizManager
-import os
+from start_menu import StartMenu
+from create_quiz import CreateQuizScreen
+from take_quiz import TakeQuizScreen
+from quiz_questions import QuizQuestionsScreen
+from score_screen import ScoreScreen
 
 class QuizApp(tk.Tk):  # Ensure proper inheritance from tk.Tk
     def __init__(self):
